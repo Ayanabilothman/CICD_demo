@@ -1,0 +1,75 @@
+#name
+name: CI
+
+#events
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+      - dev
+
+#jobs
+jobs:
+  #1 lint
+  lint:
+    name: lint #UI
+    runs-on: ubuntu-latest #VM
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: setup nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: run Eslint
+        run: npm run lint
+
+  #2 test
+  test:
+    name: unit test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: setup nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: run unit test
+        run: npm run test
+
+  #3 build
+  build:
+    name: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: setup nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: build
+        run: npm run build
