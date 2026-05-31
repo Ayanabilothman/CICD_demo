@@ -1,0 +1,25 @@
+#name
+name: Render Deploy
+
+#events
+on:
+  workflow_run:
+    workflows: ['CI']
+    types:
+      - completed
+    branches:
+      - main
+
+#jobs
+jobs:
+  render_deploy:
+    name: trigger render webhook
+    runs-on: ubuntu-latest
+
+    if: ${{github.event.workflow_run.conclusion == 'success'}}
+
+    steps:
+      - name: trigger webhook
+        run: curl "$RENDER_DEPLOY_HOOK"
+        env:
+          RENDER_DEPLOY_HOOK: ${{secrets.RENDER_DEPLOY_HOOK}}
